@@ -1,13 +1,15 @@
-package com.app.gifvfeed.domain.mappers
+package com.app.gifvfeed.data.mappers
 
 import com.app.gifvfeed.data.network.entity.EntryDto
 import com.app.gifvfeed.data.network.entity.TimeLineItemDto
 import com.app.gifvfeed.data.network.entity.TimeLineItemEntryDto
 import com.app.gifvfeed.domain.entity.Entry
 import com.app.gifvfeed.domain.entity.TimeLineItem
-import com.app.gifvfeed.domain.utils.Dto2DomainMapper
+import com.app.gifvfeed.data.mappers.base.Dto2DomainMapper
+import com.app.gifvfeed.data.mappers.base.MixedDto2DomainMapper
+import javax.inject.Inject
 
-class TimeLineItemMapper : Dto2DomainMapper<TimeLineItemDto<out Any>, TimeLineItem> {
+class TimeLineItemMapper : MixedDto2DomainMapper<TimeLineItemDto<out Any>, TimeLineItem> {
 
     private val entryMapper: Dto2DomainMapper<EntryDto, Entry> = EntryMapper()
 
@@ -29,6 +31,16 @@ class TimeLineItemMapper : Dto2DomainMapper<TimeLineItemDto<out Any>, TimeLineIt
             }
         }
         return timeLineObject
+    }
+
+    override fun toListedEntity(listDtoObj: List<TimeLineItemDto<out Any>>): List<TimeLineItem> {
+        val tempList: MutableList<TimeLineItem> = mutableListOf()
+        for (dto in listDtoObj) {
+            toEntity(dto)?.let {
+                tempList.add(it)
+            }
+        }
+        return tempList
     }
 
 }

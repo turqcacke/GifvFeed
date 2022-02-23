@@ -1,12 +1,13 @@
-package com.app.gifvfeed.domain.mappers
+package com.app.gifvfeed.data.mappers
 
 import com.app.gifvfeed.data.network.entity.*
 import com.app.gifvfeed.domain.entity.EntryBlock
 import com.app.gifvfeed.domain.entity.ExternalVideoRes
 import com.app.gifvfeed.domain.entity.Media
 import com.app.gifvfeed.domain.entity.Video
-import com.app.gifvfeed.domain.utils.Dto2DomainMapper
-import com.app.gifvfeed.domain.utils.MixedDto2DomainMapper
+import com.app.gifvfeed.data.mappers.base.Dto2DomainMapper
+import com.app.gifvfeed.data.mappers.base.MixedDto2DomainMapper
+import javax.inject.Inject
 
 class EntryBlockMapper : MixedDto2DomainMapper<EntryBlockBase, EntryBlock> {
 
@@ -14,7 +15,7 @@ class EntryBlockMapper : MixedDto2DomainMapper<EntryBlockBase, EntryBlock> {
     private val attachImage2MediaMapper: Dto2DomainMapper<AttachImageDto, Media> =
         AttachImage2MediaMapper()
     private val externalService2VideoRes: Dto2DomainMapper<ExternalServiceDto, ExternalVideoRes> =
-        ExternalVideoResMapper()
+        ExternalService2ExternalVideoResMapper()
 
     override fun toEntity(dtoObj: EntryBlockBase): EntryBlock? {
         return when (dtoObj) {
@@ -35,8 +36,12 @@ class EntryBlockMapper : MixedDto2DomainMapper<EntryBlockBase, EntryBlock> {
             )
             is VideoEntryBlockDto -> {
                 val externalVideoRes: ExternalVideoRes? =
-                    externalService2VideoRes.toEntity(dtoObj.external_service)
-                val thumbnail: Media? = attachImage2MediaMapper.toEntity(dtoObj.thumbnail)
+                    externalService2VideoRes.toEntity(dtoObj.data.video.data.external_service)
+                val thumbnail: Media? = dtoObj.data.video.data.thumbnail.data?.let {
+                    attachImage2MediaMapper.toEntity(
+                        it
+                    )
+                }
 
                 if (externalVideoRes !== null && thumbnail !== null) {
                     return EntryBlock.VideoBlock(
@@ -55,6 +60,12 @@ class EntryBlockMapper : MixedDto2DomainMapper<EntryBlockBase, EntryBlock> {
     }
 
     override fun toListedEntity(listDtoObj: List<EntryBlockBase>): List<EntryBlock> {
-        TODO("Not yet implemented")
+        val listEntryBlock: MutableList<EntryBlock> = mutableListOf()
+        for(dto in listDtoObj){
+            toEntity(dto)?.let{
+                listEntryBlock.add(it)
+            }
+        }
+        return listEntryBlock
     }
 }

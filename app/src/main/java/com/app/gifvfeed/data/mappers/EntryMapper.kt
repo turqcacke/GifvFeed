@@ -1,4 +1,4 @@
-package com.app.gifvfeed.domain.mappers
+package com.app.gifvfeed.data.mappers
 
 import com.app.gifvfeed.data.network.entity.EntryBlockBase
 import com.app.gifvfeed.data.network.entity.EntryDto
@@ -6,8 +6,9 @@ import com.app.gifvfeed.data.network.entity.SubsiteDto
 import com.app.gifvfeed.domain.entity.Entry
 import com.app.gifvfeed.domain.entity.EntryBlock
 import com.app.gifvfeed.domain.entity.Subsite
-import com.app.gifvfeed.domain.utils.Dto2DomainMapper
-import com.app.gifvfeed.domain.utils.ListedDto2DomainMapper
+import com.app.gifvfeed.data.mappers.base.Dto2DomainMapper
+import com.app.gifvfeed.data.mappers.base.ListedDto2DomainMapper
+import javax.inject.Inject
 
 class EntryMapper : Dto2DomainMapper<EntryDto, Entry> {
 
