@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.app.gifvfeed.R
-import com.app.gifvfeed.network.entity.*
-import com.app.gifvfeed.network.retrofit.ApiService
-import com.app.gifvfeed.network.serialization.EntryBlockDeserializer
-import com.app.gifvfeed.network.serialization.TimeLineItemDtoDeserializer
+import com.app.gifvfeed.data.network.entity.*
+import com.app.gifvfeed.data.network.retrofit.ApiService
+import com.app.gifvfeed.data.network.serialization.EntryBlockDeserializer
+import com.app.gifvfeed.data.network.serialization.TimeLineItemDtoDeserializer
 import com.google.gson.GsonBuilder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
@@ -29,6 +29,7 @@ class GifvFeedActivity : AppCompatActivity() {
         val gson = GsonBuilder()
             .registerTypeAdapter(TimeLineItemDto::class.java, TimeLineItemDtoDeserializer())
             .registerTypeAdapter(EntryBlockBase::class.java, EntryBlockDeserializer()
+
 //            .registerTypeAdapterFactory(
 //                RuntimeTypeAdapterFactory.of(
 //                    EntryBlockBase::class.java, "type"
