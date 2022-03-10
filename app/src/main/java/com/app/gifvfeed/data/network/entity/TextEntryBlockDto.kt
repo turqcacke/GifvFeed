@@ -6,6 +6,6 @@ class TextEntryBlockDto(
 ): EntryBlockBase(){
     class TextItem(
         val text: String,
-        val text_truncated: String
+        val text_truncated: String? = null,
     )
 }

@@ -8,7 +8,6 @@ data class TimeLineSubItemDto(
     enum class Type{
         @SerializedName("vacancy")
         VACANCY,
-
         @SerializedName("event")
         EVENT
     }

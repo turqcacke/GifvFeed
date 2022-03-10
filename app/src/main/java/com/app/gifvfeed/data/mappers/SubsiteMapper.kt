@@ -11,13 +11,15 @@ import javax.inject.Inject
 
 class SubsiteMapper: Dto2DomainMapper<SubsiteDto, Subsite> {
     private val attachDto2MediaMapper: Dto2DomainMapper<AttachDto, Media> = AttachDto2MediaMapper()
-    override fun toEntity(dtoObj: SubsiteDto): Subsite? {
-        val avatar =  attachDto2MediaMapper.toEntity(dtoObj.avatar)
-        avatar?.let {
-            return Subsite(
-                dtoObj.name,
-                    it
+    override fun toEntity(dtoObj: SubsiteDto?): Subsite? {
+        val avatar =  attachDto2MediaMapper.toEntity(dtoObj?.avatar)
+        dtoObj?.name?.let {
+            if (avatar !==null) {
+                return Subsite(
+                    dtoObj.name,
+                    avatar
                 )
+            }
         }
         return null
     }

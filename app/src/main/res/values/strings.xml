@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">GifvFeed</string>
+    <string name="title_activity_gifv_feed_main">GifvFeedMain</string>
+    <string name="image_upload_fail"> Failed to upload image</string>
 </resources>

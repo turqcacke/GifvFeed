@@ -7,7 +7,6 @@ import com.app.gifvfeed.domain.entity.Media
 import com.app.gifvfeed.domain.entity.Video
 import com.app.gifvfeed.data.mappers.base.Dto2DomainMapper
 import com.app.gifvfeed.data.mappers.base.MixedDto2DomainMapper
-import javax.inject.Inject
 
 class EntryBlockMapper : MixedDto2DomainMapper<EntryBlockBase, EntryBlock> {
 
@@ -17,7 +16,7 @@ class EntryBlockMapper : MixedDto2DomainMapper<EntryBlockBase, EntryBlock> {
     private val externalService2VideoRes: Dto2DomainMapper<ExternalServiceDto, ExternalVideoRes> =
         ExternalService2ExternalVideoResMapper()
 
-    override fun toEntity(dtoObj: EntryBlockBase): EntryBlock? {
+    override fun toEntity(dtoObj: EntryBlockBase?): EntryBlock? {
         return when (dtoObj) {
             is MediaEntryBlockDto -> {
                 var media: Media? = null
@@ -34,7 +33,7 @@ class EntryBlockMapper : MixedDto2DomainMapper<EntryBlockBase, EntryBlock> {
                 dtoObj.data.text,
                 dtoObj.data.text_truncated
             )
-            is VideoEntryBlockDto -> {
+            is YouTubeVideoEntryBlockDto -> {
                 val externalVideoRes: ExternalVideoRes? =
                     externalService2VideoRes.toEntity(dtoObj.data.video.data.external_service)
                 val thumbnail: Media? = dtoObj.data.video.data.thumbnail.data?.let {
@@ -44,7 +43,7 @@ class EntryBlockMapper : MixedDto2DomainMapper<EntryBlockBase, EntryBlock> {
                 }
 
                 if (externalVideoRes !== null && thumbnail !== null) {
-                    return EntryBlock.VideoBlock(
+                    return EntryBlock.YouTubeVideoBlock(
                         Video(
                             externalVideoRes,
                             thumbnail
@@ -53,19 +52,26 @@ class EntryBlockMapper : MixedDto2DomainMapper<EntryBlockBase, EntryBlock> {
                 }
                 null
             }
+            is InstagramEntryBlockDto -> {
+                return EntryBlock.InstagramBlock(
+                    dtoObj.data.instagram.data.box_data.url
+                )
+            }
             else -> {
                 null
             }
         }
     }
 
-    override fun toListedEntity(listDtoObj: List<EntryBlockBase>): List<EntryBlock> {
-        val listEntryBlock: MutableList<EntryBlock> = mutableListOf()
-        for(dto in listDtoObj){
-            toEntity(dto)?.let{
-                listEntryBlock.add(it)
+    override fun toListedEntity(listDtoObj: List<EntryBlockBase>?): List<EntryBlock> {
+        val listEntryBlock: MutableList<EntryBlock?> = mutableListOf()
+        if (listDtoObj != null) {
+            for(dto in listDtoObj){
+                toEntity(dto)?.let{
+                    listEntryBlock.add(it)
+                }
             }
         }
-        return listEntryBlock
+        return listEntryBlock.filterNotNull()
     }
 }

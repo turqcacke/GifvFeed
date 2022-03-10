@@ -13,7 +13,7 @@ class TimeLineItemMapper : MixedDto2DomainMapper<TimeLineItemDto<out Any>, TimeL
 
     private val entryMapper: Dto2DomainMapper<EntryDto, Entry> = EntryMapper()
 
-    override fun toEntity(dtoObj: TimeLineItemDto<out Any>): TimeLineItem? {
+    override fun toEntity(dtoObj: TimeLineItemDto<out Any>?): TimeLineItem? {
         val timeLineObject = when (dtoObj) {
             is TimeLineItemEntryDto -> {
                 var timeLineItem: TimeLineItem? = null
@@ -33,14 +33,16 @@ class TimeLineItemMapper : MixedDto2DomainMapper<TimeLineItemDto<out Any>, TimeL
         return timeLineObject
     }
 
-    override fun toListedEntity(listDtoObj: List<TimeLineItemDto<out Any>>): List<TimeLineItem> {
-        val tempList: MutableList<TimeLineItem> = mutableListOf()
-        for (dto in listDtoObj) {
-            toEntity(dto)?.let {
-                tempList.add(it)
+    override fun toListedEntity(listDtoObj: List<TimeLineItemDto<out Any>>?): List<TimeLineItem> {
+        val tempList: MutableList<TimeLineItem?> = mutableListOf()
+        if (listDtoObj != null) {
+            for (dto in listDtoObj) {
+                toEntity(dto)?.let {
+                    tempList.add(it)
+                }
             }
         }
-        return tempList
+        return tempList.filterNotNull()
     }
 
 }

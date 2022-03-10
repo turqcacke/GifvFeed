@@ -6,19 +6,21 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name="com.app.di.App"
+        android:name="com.app.di.BaseApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_launcher_gifv"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_launcher_gifv_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GifvFeed">
 
         <activity
-            android:name=".presentation.GifvFeedActivity"
-            android:exported="true">
+            android:name=".presentation.GifvFeed"
+            android:exported="true"
+            android:label="@string/title_activity_gifv_feed_main"
+            android:theme="@style/Theme.GifvFeed" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

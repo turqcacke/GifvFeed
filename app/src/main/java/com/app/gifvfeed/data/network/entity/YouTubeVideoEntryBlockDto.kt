@@ -1,6 +1,6 @@
 package com.app.gifvfeed.data.network.entity
 
-class VideoEntryBlockDto(
+class YouTubeVideoEntryBlockDto(
     override val type: Type,
     val data: VideoDtoWrapper
 ) : EntryBlockBase(){
