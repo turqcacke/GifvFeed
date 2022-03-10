@@ -56,7 +56,7 @@ fun VideoElement(
         } else {
             GlideImage(
                 modifier = Modifier.fillMaxSize(),
-                imageModel = MediaUrl.getVideoUrl(thumbLink),
+                imageModel = MediaUrl.getVideoPreview(thumbLink),
                 success = { imageState ->
                     Row(
                         modifier = Modifier

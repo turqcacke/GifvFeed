@@ -14,7 +14,8 @@ object MediaUrl {
     }
 
     enum class VideoFormat(val format: String){
-        MP4("mp4")
+        MP4("mp4"),
+        JPEG("jpeg")
     }
 
     fun getImageCorpUrl(mediaKey: String, resolution: CorpRes = CorpRes.NO_CROP): String {
@@ -44,5 +45,9 @@ object MediaUrl {
             .appendPath("format")
             .appendPath(format.format)
         return builder.build().toString()
+    }
+
+    fun getVideoPreview(mediaKey: String): String {
+        return getVideoUrl(mediaKey = mediaKey, format = MediaUrl.VideoFormat.JPEG)
     }
 }

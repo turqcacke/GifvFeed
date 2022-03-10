@@ -798,10 +798,15 @@ private fun LazyListState.playingItem(
         else -> false
     }
 
-    val midPoint = (layoutInfo.viewportStartOffset + layoutInfo.viewportEndOffset) / 2
+    val midPoint =when{
+        visibleItems.size % 2 == 0 -> {
+            visibleItems.size / 2
+        }
+        else -> (visibleItems.size / 2) + 1
+    }
 
     val centerItems = visibleItems.sortedBy {
-        abs((it.offset + it.size / 2) - midPoint)
+        abs(midPoint - (visibleItems.indexOf(it) + 1))
     }
 
     return when {
@@ -822,7 +827,7 @@ private fun LazyListState.playingItem(
 fun isMediaPlayable(item: TimeLineItem): Boolean {
     val firstItem = when (item) {
         is TimeLineItem.TimeLineEntry -> {
-            item.data.blocks.firstOrNull()
+            item.data.mediaBlocks.firstOrNull()
         }
         else -> {
             null

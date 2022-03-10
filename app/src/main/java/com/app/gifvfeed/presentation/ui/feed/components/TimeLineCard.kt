@@ -228,14 +228,13 @@ fun TimeLineCard(
                         )
                     }
                 }
-
             }
         }
 
-        Row(
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
                 .wrapContentHeight()
+                .fillMaxWidth()
                 .padding(
                     dimensionResource(id = R.dimen.dimen_default_16),
                     0.dp
@@ -244,7 +243,9 @@ fun TimeLineCard(
                     top.linkTo(media.bottom)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
-                }
+                },
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
             if (linkBlocks.isNotEmpty()) {
                 linkBlocks.forEach { block ->
