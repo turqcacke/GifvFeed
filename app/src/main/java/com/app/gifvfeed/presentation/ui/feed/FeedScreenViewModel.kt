@@ -1,7 +1,7 @@
 package com.app.gifvfeed.presentation.ui.feed
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.gifvfeed.Interactors
@@ -10,7 +10,6 @@ import com.app.gifvfeed.domain.entity.TimeLineItem
 import com.app.gifvfeed.presentation.ui.feed.components.FeedState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
