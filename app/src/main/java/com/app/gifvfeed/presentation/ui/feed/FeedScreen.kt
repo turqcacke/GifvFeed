@@ -45,8 +45,7 @@ fun FeedScreen(
                         .fillMaxSize()
                         .background(Color.White),
                     list = state.data,
-                    loadMoreState = viewModel.getLoadingState,
-                    isRefreshingState = viewModel.isRefreshing
+                    loadMoreState = viewModel.getLoadingState
                 ) {
                     viewModel.getTimeLineItems()
                 }

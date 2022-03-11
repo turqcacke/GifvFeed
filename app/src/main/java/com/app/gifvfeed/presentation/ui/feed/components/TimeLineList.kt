@@ -26,7 +26,6 @@ import kotlin.math.abs
 fun TimelineCardList(
     modifier: Modifier = Modifier,
     list: List<TimeLineItem>,
-    isRefreshingState: State<Boolean>,
     loadMoreState: State<Boolean>? = null,
     loadMore: () -> Unit = {}
 ) {
@@ -129,14 +128,13 @@ fun TimelineCardList(
         }
     }
 
-    listState.OnBottomReached(isRefreshing = isRefreshingState) {
+    listState.OnBottomReached {
         loadMore()
     }
 }
 
 @Composable
 private fun LazyListState.OnBottomReached(
-    isRefreshing: State<Boolean>,
     loadMore: () -> Unit
 ) {
     val shouldLoadMore = remember {
