@@ -21,7 +21,7 @@ class EntryMapper : Dto2DomainMapper<EntryDto, Entry> {
         val blocks = blockMapper.toListedEntity(dtoObj?.blocks)
 
         return when {
-            dtoObj !== null && author !== null && subsite !== null && blocks.isNotEmpty() -> Entry(
+            dtoObj !== null && author !== null && subsite !== null && (blocks.isNotEmpty() || dtoObj.title != "") -> Entry(
                 author = author,
                 subsite = subsite,
                 blocks = blocks,
@@ -29,7 +29,8 @@ class EntryMapper : Dto2DomainMapper<EntryDto, Entry> {
                 counter = Counter(
                     comments = dtoObj.counters.comments,
                     likes = dtoObj.likes.summ
-                )
+                ),
+                date = dtoObj.date
             )
             else -> null
         }

@@ -10,6 +10,7 @@ data class EntryDto(
     val type: Int,
     val counters: CountersDto,
     val likes: LikesDto,
+    val date: Long,
 
     @SerializedName("blocks")
     val _blocks: List<EntryBlockBase?>

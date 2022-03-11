@@ -6,6 +6,7 @@ data class Entry(
     val title: String,
     val blocks: List<EntryBlock>,
     val counter: Counter,
+    val date: Long,
     val mediaBlocks: List<EntryBlock.MediaBlock> = blocks.filterIsInstance<EntryBlock.MediaBlock>(),
     val textBlocks: List<EntryBlock.TextBlock> = blocks.filterIsInstance<EntryBlock.TextBlock>(),
     val linkBlocks: List<EntryBlock> = blocks.filter {

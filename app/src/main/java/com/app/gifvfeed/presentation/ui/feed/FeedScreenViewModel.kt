@@ -22,6 +22,9 @@ class FeedScreenViewModel @Inject constructor(
 
     private val setParams = mutableStateOf(SetParams())
 
+    private val _isRefreshing = mutableStateOf(false)
+    val isRefreshing = _isRefreshing
+
     private val _feedItemsState = mutableStateOf<FeedState>(FeedState.InitLoading)
     val feedItemsState: State<FeedState> = _feedItemsState
 
@@ -36,12 +39,13 @@ class FeedScreenViewModel @Inject constructor(
         val lastSortingValue = setParams.value.lastSortingValue
 
         viewModelScope.launch(Dispatchers.IO) {
-            withContext(Dispatchers.Main){loadingMore.value = true}
+            withContext(Dispatchers.Main) { loadingMore.value = true }
             interactors.getTimeLineUseCase(lastId, lastSortingValue).also {
                 when {
                     it.isSuccess -> {
                         val newSetParams = it.getOrNull()!!.second
-                        if(newSetParams.lastId != 0 && lastSortingValue != 0){
+
+                        if (newSetParams.lastId != 0 && lastSortingValue != 0) {
                             setParams.value = newSetParams
                         }
 
@@ -50,7 +54,7 @@ class FeedScreenViewModel @Inject constructor(
                     }
 
                     it.isFailure -> {
-                        _lastItemsLoaded.clear()
+                        resetValues()
                         _feedItemsState.value = FeedState.Error(
                             it.exceptionOrNull()!!.message ?: "Error while loading content"
                         )
@@ -59,6 +63,22 @@ class FeedScreenViewModel @Inject constructor(
                 loadingMore.value = false
             }
         }
+    }
+
+    fun retry() {
+        _feedItemsState.value = FeedState.InitLoading
+        getTimeLineItems()
+    }
+
+    fun refresh() {
+        _isRefreshing.value = true
+        resetValues()
+        _isRefreshing.value = false
+    }
+
+    private fun resetValues() {
+        _lastItemsLoaded.clear()
+        setParams.value = SetParams()
     }
 
 }

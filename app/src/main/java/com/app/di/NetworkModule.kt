@@ -40,7 +40,7 @@ object NetworkModule {
 
         val logInterceptor = HttpLoggingInterceptor()
         logInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
-        val client = OkHttpClient.Builder().addInterceptor(logInterceptor).build()
+        val client = OkHttpClient.Builder().cache(null).build()
 
         return Retrofit.Builder()
             .baseUrl(BaseUrls.API_URL)

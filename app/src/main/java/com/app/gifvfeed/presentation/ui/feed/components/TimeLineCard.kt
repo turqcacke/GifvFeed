@@ -29,6 +29,7 @@ import com.app.gifvfeed.domain.entity.TimeLineItem
 import com.app.gifvfeed.presentation.ui.theme.LightGreen
 import com.app.gifvfeed.presentation.ui.theme.LightRed
 import com.app.gifvfeed.presentation.ui.utils.Utils.parseColorFromString
+import com.app.gifvfeed.presentation.utils.DateTimeFormatter
 import com.app.gifvfeed.presentation.utils.NumberFormatter
 import com.google.android.exoplayer2.ExoPlayer
 import com.skydoves.landscapist.ShimmerParams
@@ -41,6 +42,7 @@ fun TimeLineCard(
     timeLineItem: TimeLineItem,
     exoPlayer: ExoPlayer,
     isPlaying: Boolean = false,
+    onClickPlay: () -> Unit = {}
 ) {
     val uriHandler = LocalUriHandler.current
 
@@ -54,12 +56,12 @@ fun TimeLineCard(
     val medialBlocks = timeLineItemEntry.data.blocks.filterIsInstance<EntryBlock.MediaBlock>()
 
     ConstraintLayout(
-        modifier = modifier.padding(0.dp, dimensionResource(id = R.dimen.dimen_default_16))
+        modifier = modifier.padding(vertical = dimensionResource(id = R.dimen.dimen_default_16))
     ) {
         val (title, media, links, stats) = createRefs()
         ConstraintLayout(
             modifier = Modifier
-                .padding(dimensionResource(id = R.dimen.dimen_default_16), 0.dp)
+                .padding(horizontal = dimensionResource(id = R.dimen.dimen_default_16))
                 .fillMaxWidth()
                 .constrainAs(title) {
                     top.linkTo(parent.top)
@@ -72,12 +74,7 @@ fun TimeLineCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
-                    .padding(
-                        0.dp,
-                        0.dp,
-                        0.dp,
-                        10.dp
-                    )
+                    .padding(bottom = 10.dp)
                     .constrainAs(subsiteInfo) {
                         top.linkTo(parent.top)
                         end.linkTo(parent.end)
@@ -124,23 +121,30 @@ fun TimeLineCard(
                 Text(
                     text = timeLineItemEntry.data.subsite.name,
                     modifier = Modifier.padding(
-                        8.dp,
-                        0.dp,
-                        0.dp,
-                        0.dp,
-                    ),
+                        start = 8.dp,
+                        ),
                     fontSize = dimensionResource(id = R.dimen.font_default_16).value.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colors.onSurface
                 )
                 Text(
                     text = timeLineItemEntry.data.author.name,
+                    modifier = Modifier
+                        .padding(
+                            start = 12.dp,
+                        )
+                        .fillMaxWidth(0.75f),
+                    fontSize = dimensionResource(id = R.dimen.font_lower_15).value.sp,
+                    color = MaterialTheme.colors.onSurface
+
+                )
+                Text(
+                    text = DateTimeFormatter.getDifference(timeLineItemEntry.data.date),
                     modifier = Modifier.padding(
-                        12.dp,
-                        0.dp,
-                        0.dp,
-                        0.dp,
+                        start = 12.dp,
                     ),
-                    fontSize = dimensionResource(id = R.dimen.font_lower_15).value.sp
+                    fontSize = dimensionResource(id = R.dimen.font_lower_15).value.sp,
+                    color = Color.Gray
                 )
             }
 
@@ -160,7 +164,8 @@ fun TimeLineCard(
                     Text(
                         text = timeLineItemEntry.data.title,
                         fontWeight = FontWeight.Bold,
-                        fontSize = dimensionResource(id = R.dimen.font_medium_22).value.sp
+                        fontSize = dimensionResource(id = R.dimen.font_medium_22).value.sp,
+                        color = MaterialTheme.colors.onSurface
                     )
                 }
             }
@@ -188,14 +193,15 @@ fun TimeLineCard(
                     }
                     Text(
                         text = text,
-                        fontSize = dimensionResource(id = R.dimen.font_default_16).value.sp
+                        fontSize = dimensionResource(id = R.dimen.font_default_16).value.sp,
+                        color = MaterialTheme.colors.onSurface
                     )
                 }
             }
         }
         Row(
             modifier = Modifier
-                .padding(0.dp, 0.dp, 0.dp, dimensionResource(id = R.dimen.dimen_low_12))
+                .padding(top = dimensionResource(id = R.dimen.dimen_low_12))
                 .fillMaxWidth()
                 .wrapContentHeight()
                 .constrainAs(media) {
@@ -216,7 +222,8 @@ fun TimeLineCard(
                                 .height(210.dp),
                             isPlaying = isPlaying,
                             thumbLink = mediaBlock.data.uuid,
-                            exoPlayer = exoPlayer
+                            exoPlayer = exoPlayer,
+                            onClickPlay = onClickPlay
                         )
                     }
                     false -> {
@@ -236,8 +243,7 @@ fun TimeLineCard(
                 .wrapContentHeight()
                 .fillMaxWidth()
                 .padding(
-                    dimensionResource(id = R.dimen.dimen_default_16),
-                    0.dp
+                    horizontal = dimensionResource(id = R.dimen.dimen_default_16)
                 )
                 .constrainAs(links) {
                     top.linkTo(media.bottom)
@@ -260,7 +266,7 @@ fun TimeLineCard(
                                 text = "YouTube",
                                 click = {
                                     uriHandler.openUri(link)
-                                }
+                                },
                             )
                         }
                         is EntryBlock.InstagramBlock -> {
@@ -286,10 +292,9 @@ fun TimeLineCard(
                 .fillMaxWidth()
                 .wrapContentHeight()
                 .padding(
-                    dimensionResource(id = R.dimen.dimen_default_16),
-                    dimensionResource(id = R.dimen.dimen_low_12),
-                    dimensionResource(id = R.dimen.dimen_default_16),
-                    0.dp
+                    start = dimensionResource(id = R.dimen.dimen_default_16),
+                    top = dimensionResource(id = R.dimen.dimen_low_12),
+                    end = dimensionResource(id = R.dimen.dimen_default_16)
                 )
                 .constrainAs(stats) {
                     top.linkTo(links.bottom)
@@ -314,10 +319,11 @@ fun TimeLineCard(
                 )
                 Text(
                     modifier = Modifier.padding(
-                        4.dp, 0.dp, 0.dp, 0.dp
+                        start = 4.dp
                     ),
                     text = NumberFormatter.format(timeLineItemEntry.data.counter.comments),
                     fontSize = dimensionResource(id = R.dimen.font_default_16).value.sp,
+                    color = MaterialTheme.colors.onSurface
                 )
             }
             Text(
@@ -328,7 +334,7 @@ fun TimeLineCard(
                     timeLineItemEntry.data.counter.likes < 0 -> LightRed
                     else -> Color.Gray
                 },
-                fontSize = dimensionResource(id = R.dimen.font_default_16).value.sp
+                fontSize = dimensionResource(id = R.dimen.font_default_16).value.sp,
             )
         }
 
