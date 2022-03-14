@@ -10,6 +10,7 @@ import androidx.compose.material.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -79,7 +80,7 @@ fun VideoElement(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
-                        val painter = painterResource(id = R.drawable.ic_play)
+                        val painter = painterResource(id = R.drawable.ic_play, )
                         IconButton(
                             modifier = Modifier.wrapContentSize(),
                             onClick = {
@@ -89,7 +90,8 @@ fun VideoElement(
                             Icon(
                                 modifier = Modifier.fillMaxSize(0.3f),
                                 painter = painter,
-                                contentDescription = null
+                                contentDescription = null,
+                                tint = Color.White
                             )
                         }
                     }
