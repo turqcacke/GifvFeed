@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'org.jetbrains.kotlin.kapt'
     id 'org.jetbrains.kotlin.plugin.serialization'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -16,6 +17,9 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary true
+        }
     }
 
     buildTypes {
@@ -31,32 +35,58 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+    sourceSets {
+        main {
+            res {
+                srcDirs 'src/main/res',
+                        'src/main/res/layouts/feed_components'
+            }
+        }
+    }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion compose_version
+    }
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
 }
 
 dependencies {
 
-    implementation 'com.android.support.constraint:constraint-layout:2.0.4'
-    def lifecycle_version = "2.5.0-alpha02"
-    def arch_version = "2.1.0"
-    def dagger_hilt_version = "2.41"
-    def exo_player_version = "2.16.1"
-    def gson_version = "2.9.0"
-    def gson_extras_version = "2.8.5"
-    def retrofit_version = "2.9.0"
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'com.google.android.material:material:1.5.0'
 
-    implementation 'com.android.support:appcompat-v7:28.0.0'
+    // Integration with activities
+    implementation 'androidx.activity:activity-compose:1.4.0'
+    // Compose Material Design
+    implementation "androidx.compose.material:material:$compose_version"
+    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.0"
+    // Animations
+    implementation "androidx.compose.animation:animation:$compose_version"
+    // Tooling support (Previews, etc.)
+    implementation "androidx.compose.ui:ui-tooling:$compose_version"
+    // Integration with ViewModels
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.5.0-alpha04'
+    // UI Tests
+    androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.1.1'
+
     testImplementation 'junit:junit:4.13.2'
+
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
+    def lifecycle_version = "2.5.0-alpha03"
     // ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     // ViewModel utilities for Compose
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version"
-    // LiveData
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
-    // Lifecycles only (without ViewModel or LiveData)
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
 
     // Saved state module for ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
@@ -65,20 +95,31 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
 
     // Gson
+    def gson_version = "2.9.0"
     implementation "com.google.code.gson:gson:$gson_version"
-//    implementation "com.google.code.gson:gson-extras:$gson_extras_version"
 
     //Retrofit
+    def retrofit_version = "2.9.0"
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
-    implementation "com.squareup.okhttp3:logging-interceptor:4.9.3"
+    implementation "com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2"
 
     //Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0"
 
     //Hilt
+    def dagger_hilt_version = "2.41"
     implementation "com.google.dagger:hilt-android:$dagger_hilt_version"
+    implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
     kapt "com.google.dagger:hilt-compiler:$dagger_hilt_version"
 
+    //ExoPLayer
+    def exo_player_version = "2.17.1"
     implementation "com.google.android.exoplayer:exoplayer:$exo_player_version"
+
+    // Glide
+    implementation "com.github.skydoves:landscapist-glide:1.4.8"
+
+    def accompanist = "0.24.3-alpha"
+    implementation "com.google.accompanist:accompanist-swiperefresh:$accompanist"
 }
